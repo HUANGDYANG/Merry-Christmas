@@ -1,0 +1,315 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+    /* Deep dark blue gradient */
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: 'Mountains of Christmas', cursive;
+    color: #fff;
+}
+
+#snowCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    /* Behind the tree content mostly, or overlay if careful */
+    pointer-events: none;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    /* Content above snow canvas base */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    font-size: 4rem;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 0, 0, 0.5);
+    animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    from {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 0, 0, 0.5);
+    }
+
+    to {
+        text-shadow: 0 0 20px rgba(255, 255, 255, 1), 0 0 40px rgba(255, 0, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.6);
+    }
+}
+
+/* Tree Container */
+.tree-container {
+    position: relative;
+    width: 300px;
+    /* Base width reference */
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Gentle swaying of the whole tree */
+    transform-origin: bottom center;
+    animation: treeSway 8s ease-in-out infinite;
+}
+
+@keyframes treeSway {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(1deg);
+    }
+
+    75% {
+        transform: rotate(-1deg);
+    }
+}
+
+/* Star */
+.star {
+    position: absolute;
+    top: -30px;
+    /* Adjust based on star size */
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 30px solid #ffd700;
+    z-index: 10;
+    animation: starTwinkle 2s infinite alternate;
+}
+
+.star:after {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: -15px;
+    /* Centers it */
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 30px solid #ffd700;
+}
+
+@keyframes starTwinkle {
+    0% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px #ffd700);
+    }
+
+    100% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 25px #ffeb3b);
+    }
+}
+
+/* Tree Layers */
+.layer {
+    width: 0;
+    height: 0;
+    border-left: solid transparent;
+    border-right: solid transparent;
+    border-bottom: solid #0f5132;
+    /* Base pine color */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.3));
+}
+
+.layer::after {
+    /* Texture/Snow effect on branches - simplified as gradients or lighter borders */
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: inherit;
+    border-right: inherit;
+    border-top: 0;
+    border-bottom: inherit;
+    /* inherit color? No, needs to be lighter or snow */
+    /* Let's try simpler highlight logic first, or leave plain for clean look */
+}
+
+.layer-top {
+    top: 0;
+    border-left-width: 50px;
+    border-right-width: 50px;
+    border-bottom-width: 80px;
+    border-bottom-color: #1a6b41;
+    z-index: 3;
+}
+
+.layer-middle {
+    top: 50px;
+    border-left-width: 70px;
+    border-right-width: 70px;
+    border-bottom-width: 100px;
+    border-bottom-color: #145e39;
+    /* Slightly darker */
+    z-index: 2;
+}
+
+.layer-bottom {
+    top: 110px;
+    border-left-width: 90px;
+    border-right-width: 90px;
+    border-bottom-width: 120px;
+    border-bottom-color: #0d4d2e;
+    /* Darkest */
+    z-index: 1;
+}
+
+/* Trunk */
+.trunk {
+    width: 40px;
+    height: 60px;
+    background: #5d4037;
+    position: absolute;
+    bottom: 110px;
+    /* Adjust based on layers total height approx */
+    /* Actually layers are absolute, need to calculate bottom carefully.
+       Top layer 0-80.
+       Middle 50-150.
+       Bottom 110-230. 
+       So tree ends at 230(relative to .tree container top).
+    */
+    top: 230px;
+    border-radius: 2px;
+}
+
+/* Lights */
+.lights-group {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 4;
+    pointer-events: none;
+}
+
+.light {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 10px currentColor;
+    animation: flash 1.5s infinite alternate;
+}
+
+@keyframes flash {
+    0% {
+        opacity: 0.4;
+        transform: scale(0.8);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1.2);
+        box-shadow: 0 0 20px currentColor;
+    }
+}
+
+/* Positioning Lights manually for simplicity */
+.l1 {
+    top: 40px;
+    left: 50%;
+    background: #ff5252;
+    animation-delay: 0s;
+    transform: translate(-50%, 0);
+}
+
+.l2 {
+    top: 80px;
+    left: 40%;
+    background: #ffd740;
+    animation-delay: 0.5s;
+}
+
+.l3 {
+    top: 90px;
+    left: 60%;
+    background: #448aff;
+    animation-delay: 1.0s;
+}
+
+.l4 {
+    top: 130px;
+    left: 35%;
+    background: #ff5252;
+    animation-delay: 0.2s;
+}
+
+.l5 {
+    top: 140px;
+    left: 50%;
+    background: #e040fb;
+    animation-delay: 0.7s;
+    transform: translate(-50%, 0);
+}
+
+.l6 {
+    top: 135px;
+    left: 65%;
+    background: #ffd740;
+    animation-delay: 1.2s;
+}
+
+.l7 {
+    top: 180px;
+    left: 30%;
+    background: #448aff;
+    animation-delay: 0.4s;
+}
+
+.l8 {
+    top: 190px;
+    left: 45%;
+    background: #69f0ae;
+    animation-delay: 0.9s;
+}
+
+.l9 {
+    top: 185px;
+    left: 70%;
+    background: #ff5252;
+    animation-delay: 1.4s;
+}
+
+/* Snow Ground */
+.ground-snow {
+    position: absolute;
+    bottom: 80px;
+    /* Just below trunk */
+    width: 350px;
+    height: 40px;
+    background: #f0f7ff;
+    border-radius: 50%;
+    filter: blur(5px);
+    opacity: 0.8;
+    z-index: 0;
+    top: 280px;
+}
